@@ -1,18 +1,45 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { FrameSwatch, SampleScene } from '../art/Swatch';
 import { FilterOverlays } from '../components/FilterOverlays';
+import { useCamera } from '../hooks/useCamera';
 import { navigate } from '../hooks/useHashRoute';
 import { useBooth } from '../state/BoothContext';
 import { FILTERS, FRAMES, filterCssForPreview, frameById } from '../types';
 import './settings.css';
 
 export function Settings() {
+  const { videoRef, status, retry } = useCamera();
   const { filter, frame, setFilter, setFrame } = useBooth();
   const allowedFilters = frameById(frame).allowedFilters;
+  const cameraUnavailable = status !== 'starting' && status !== 'ready';
 
   return (
     <main className="screen">
       <div className="screen__body settings__body">
+        <section className="settings-preview" aria-label="Live filter preview">
+          <video
+            ref={videoRef}
+            className="settings-preview__video"
+            style={{ filter: filterCssForPreview(filter) }}
+            playsInline
+            muted
+            autoPlay
+          />
+          <FilterOverlays filter={filter} />
+
+          {status === 'starting' && (
+            <p className="settings-preview__status">Waking the camera…</p>
+          )}
+          {cameraUnavailable && (
+            <div className="settings-preview__fallback">
+              <p>Camera preview unavailable</p>
+              {status !== 'insecure' && status !== 'missing' && (
+                <button type="button" onClick={retry}>Try again</button>
+              )}
+            </div>
+          )}
+        </section>
+
         <section className="settings__group">
           <h2 className="section-label">Filter</h2>
           <ScrollRail label="filters">

@@ -1,13 +1,67 @@
 .settings__body {
-  /* Deliberately centred: the two groups are short, and centring keeps them
-     away from the header and the button on tall phones. */
   justify-content: center;
   align-items: stretch;
-  gap: clamp(0.6rem, 2.5vh, 1.25rem);
+  gap: clamp(0.45rem, 1.5vh, 0.85rem);
   width: min(58rem, 100%);
   max-width: 100%;
   margin: 0 auto;
   overflow: hidden;
+}
+
+.settings-preview {
+  position: relative;
+  flex: 0 1 auto;
+  align-self: center;
+  height: clamp(7rem, 24vh, 11rem);
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  background: #2b2119;
+  box-shadow: var(--lift);
+}
+
+.settings-preview__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.settings-preview__status,
+.settings-preview__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.6rem;
+  color: var(--paper);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.settings-preview__fallback {
+  background: #2b2119;
+}
+
+.settings-preview__fallback p {
+  margin: 0;
+}
+
+.settings-preview__fallback button {
+  border: 1.5px solid var(--paper);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  color: var(--paper);
+  background: transparent;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .settings__group {
