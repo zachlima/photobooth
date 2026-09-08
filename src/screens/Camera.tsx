@@ -4,7 +4,7 @@ import { useCamera } from '../hooks/useCamera';
 import { navigate } from '../hooks/useHashRoute';
 import { capturePhoto } from '../lib/capture';
 import { useBooth } from '../state/BoothContext';
-import { CELL_ASPECT, filterById, frameById } from '../types';
+import { CELL_ASPECT, filterCssForPreview, frameById } from '../types';
 import './camera.css';
 
 const COUNTDOWN_FROM = 3;
@@ -27,7 +27,7 @@ export function Camera() {
   const [running, setRunning] = useState(false);
   const abort = useRef(false);
 
-  const filterCss = filterById(filter).css;
+  const filterCss = filterCssForPreview(filter);
   const photoCount = frameById(frame).photoCount;
 
   // Arriving at the booth always starts a fresh strip, so a second run after

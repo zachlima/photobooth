@@ -7,7 +7,7 @@ import { Welcome } from './screens/Welcome';
 import { Settings } from './screens/Settings';
 import { Camera } from './screens/Camera';
 import { Result } from './screens/Result';
-import { frameById, type FilterId, type FrameId } from './types';
+import { filterForFrame, frameById, type FilterId, type FrameId } from './types';
 
 let demoSeeded = false;
 
@@ -31,7 +31,7 @@ export default function App() {
 
     const wanted = (params.get('filter') ?? 'none') as FilterId;
     const wantedFrame = (params.get('frame') ?? 'black') as FrameId;
-    const finalFilter = frameById(wantedFrame).lockedFilter ?? wanted;
+    const finalFilter = filterForFrame(wantedFrame, wanted);
     setFilter(finalFilter);
     setFrame(wantedFrame);
 

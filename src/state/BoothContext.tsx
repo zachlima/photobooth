@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { frameById, type FilterId, type FrameId } from '../types';
+import { filterForFrame, type FilterId, type FrameId } from '../types';
 
 /** A captured shot: already filtered and cropped, ready to draw onto the strip. */
 export type Photo = HTMLCanvasElement;
@@ -29,16 +29,14 @@ export function BoothProvider({ children }: { children: ReactNode }) {
 
   const setFilter = useCallback(
     (next: FilterId) => {
-      const locked = frameById(frame).lockedFilter;
-      setFilterState(locked ?? next);
+      setFilterState(filterForFrame(frame, next));
     },
     [frame],
   );
 
   const setFrame = useCallback((next: FrameId) => {
     setFrameState(next);
-    const locked = frameById(next).lockedFilter;
-    if (locked) setFilterState(locked);
+    setFilterState((current) => filterForFrame(next, current));
   }, []);
 
   /** Clears the shots but keeps the chosen look, so "start over" is one tap. */

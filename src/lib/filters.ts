@@ -61,6 +61,40 @@ export function addGrain(data: Uint8ClampedArray, strength: number) {
   }
 }
 
+function drawOverlay(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  overlay: NonNullable<ReturnType<typeof filterById>['overlay']>,
+) {
+  ctx.save();
+  ctx.globalAlpha = overlay.opacity;
+  ctx.globalCompositeOperation = overlay.blendMode;
+  ctx.fillStyle = overlay.color;
+  ctx.fillRect(0, 0, width, height);
+  ctx.restore();
+}
+
+/** Lose a little detail by resampling, like an inexpensive scan or old sensor. */
+function softenDetail(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, strength: number) {
+  if (strength <= 0) return;
+  const scale = Math.max(0.18, 1 - strength * 0.82);
+  const reduced = document.createElement('canvas');
+  reduced.width = Math.max(1, Math.round(canvas.width * scale));
+  reduced.height = Math.max(1, Math.round(canvas.height * scale));
+  const reducedCtx = reduced.getContext('2d');
+  if (!reducedCtx) return;
+
+  reducedCtx.imageSmoothingEnabled = true;
+  reducedCtx.imageSmoothingQuality = 'low';
+  reducedCtx.drawImage(canvas, 0, 0, reduced.width, reduced.height);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'low';
+  ctx.drawImage(reduced, 0, 0, canvas.width, canvas.height);
+}
+
 /** Applies a filter's colour, grain and vignette to a canvas, in place. */
 export function applyFilter(canvas: HTMLCanvasElement, filter: FilterId) {
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -69,12 +103,17 @@ export function applyFilter(canvas: HTMLCanvasElement, filter: FilterId) {
   const opt = filterById(filter);
   const stages = FILTER_STAGES[filter] ?? [];
 
+  if (opt.softness) softenDetail(ctx, canvas, opt.softness);
+
   if (stages.length || opt.grain) {
     const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     // One clamped pass per primitive, mirroring how CSS applies them.
     for (const stage of stages) applyMatrix(img.data, stage);
     if (opt.grain) addGrain(img.data, opt.grain);
     ctx.putImageData(img, 0, 0);
+  }
+  if (opt.overlay) {
+    drawOverlay(ctx, canvas.width, canvas.height, opt.overlay);
   }
   if (opt.vignette) {
     drawVignette(ctx, canvas.width, canvas.height, opt.vignette);

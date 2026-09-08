@@ -264,7 +264,8 @@ button {
    src/lib/filters.ts, which use the same strengths on the saved photo.
    =========================================================================== */
 .vignette,
-.grain {
+.grain,
+.filter-tint {
   position: absolute;
   inset: 0;
   pointer-events: none;

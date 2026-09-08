@@ -26,12 +26,11 @@ export function SampleScene() {
 }
 
 /**
- * Mini photostrip. Cells are 3:4 like the real thing, but only the top two are
- * drawn: four portrait cells make a strip of roughly 1:5, which at swatch size
- * would be a sliver. Two cells still show the frame's character.
+ * Mini photostrip. All four cells are shown so the settings preview matches
+ * the print the user will receive.
  */
 export function FrameSwatch({ frame }: { frame: FrameId }) {
-  const cells = [0, 1];
+  const cells = [0, 1, 2, 3];
 
   if (frame === 'japaneseId') {
     return (
@@ -115,12 +114,12 @@ export function FrameSwatch({ frame }: { frame: FrameId }) {
 
   if (frame === 'film') {
     return (
-      <svg viewBox="0 0 34 90" className="swatch__img swatch__img--strip" aria-hidden="true">
-        <rect width="34" height="90" fill="#2b2620" />
+      <svg viewBox="0 0 34 124" className="swatch__img swatch__img--strip" aria-hidden="true">
+        <rect width="34" height="124" fill="#2b2620" />
         {cells.map((i) => (
-          <rect key={i} x="7" y={5 + i * 42} width="20" height="27" fill="#f0b98d" />
+          <rect key={i} x="7" y={5 + i * 29} width="20" height="25" fill="#f0b98d" />
         ))}
-        {Array.from({ length: 13 }, (_, i) => (
+        {Array.from({ length: 18 }, (_, i) => (
           <g key={i}>
             <rect x="1.6" y={3 + i * 6.8} width="3.4" height="3.8" rx="0.8" fill="#fffcf5" />
             <rect x="29" y={3 + i * 6.8} width="3.4" height="3.8" rx="0.8" fill="#fffcf5" />
@@ -133,10 +132,10 @@ export function FrameSwatch({ frame }: { frame: FrameId }) {
   const bg = frame === 'black' ? '#2b2620' : '#ffffff';
   const stroke = frame === 'white' ? '#ddd2ba' : 'none';
   return (
-    <svg viewBox="0 0 34 90" className="swatch__img swatch__img--strip" aria-hidden="true">
-      <rect width="34" height="90" fill={bg} stroke={stroke} strokeWidth="1" />
+    <svg viewBox="0 0 34 124" className="swatch__img swatch__img--strip" aria-hidden="true">
+      <rect width="34" height="124" fill={bg} stroke={stroke} strokeWidth="1" />
       {cells.map((i) => (
-        <rect key={i} x="3" y={3.5 + i * 42} width="28" height="37" fill="#f0b98d" />
+        <rect key={i} x="5" y={4 + i * 30} width="24" height="27" fill="#f0b98d" />
       ))}
     </svg>
   );

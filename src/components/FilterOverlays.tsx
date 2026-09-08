@@ -6,9 +6,19 @@ import { filterById, type FilterId } from '../types';
  * the same strengths the capture uses, so the preview stays honest.
  */
 export function FilterOverlays({ filter }: { filter: FilterId }) {
-  const { vignette, grain } = filterById(filter);
+  const { vignette, grain, overlay } = filterById(filter);
   return (
     <>
+      {overlay ? (
+        <span
+          className="filter-tint"
+          style={{
+            backgroundColor: overlay.color,
+            opacity: overlay.opacity,
+            mixBlendMode: overlay.blendMode,
+          }}
+        />
+      ) : null}
       {vignette ? (
         <span className="vignette" style={{ '--vignette': vignette } as React.CSSProperties} />
       ) : null}

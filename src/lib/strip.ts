@@ -212,7 +212,7 @@ function drawIdDetails(ctx: CanvasRenderingContext2D, layout: Layout, date: Date
   ctx.font = '700 22px system-ui, sans-serif';
   ctx.fillText('領収書', 58, y + 15);
   ctx.font = '500 18px ui-monospace, monospace';
-  ctx.fillText(`${formatDate(date)}  PHOTO SESSION`, 58, y + 45);
+  ctx.fillText(formatLocalDateTime(date), 58, y + 45);
   ctx.fillStyle = '#155ca0';
   ctx.font = '800 27px system-ui, sans-serif';
   ctx.fillText('¥800-', 58, y + 72);
@@ -381,6 +381,11 @@ function drawHeart(
 function formatDate(date: Date) {
   const pad = (number: number) => String(number).padStart(2, '0');
   return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`;
+}
+
+function formatLocalDateTime(date: Date) {
+  const pad = (number: number) => String(number).padStart(2, '0');
+  return `${formatDate(date)} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
 function layoutFor(frame: FrameId, count: number) {

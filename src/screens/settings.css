@@ -4,31 +4,102 @@
   justify-content: center;
   align-items: stretch;
   gap: clamp(0.6rem, 2.5vh, 1.25rem);
-  width: min(34rem, 100%);
+  width: min(58rem, 100%);
+  max-width: 100%;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 .settings__group {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.scroll-rail {
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.scroll-rail__viewport {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-soft) transparent;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: 3rem;
+}
+
+.scroll-rail__viewport::-webkit-scrollbar {
+  height: 0.35rem;
+}
+
+.scroll-rail__viewport::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--ink-soft);
+}
+
+.scroll-rail__arrow {
+  position: absolute;
+  z-index: 3;
+  top: calc(50% - 0.3rem);
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  place-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--lift-sm);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.scroll-rail__arrow--left {
+  left: 0.15rem;
+}
+
+.scroll-rail__arrow--right {
+  right: 0.15rem;
+}
+
+.scroll-rail__arrow:disabled {
+  opacity: 0.42;
+  cursor: default;
+}
+
+.scroll-rail__arrow:not(:disabled):active {
+  transform: translateY(-50%) scale(0.94);
 }
 
 .swatches {
-  display: grid;
+  display: flex;
+  flex-wrap: nowrap;
   gap: 0.5rem;
-}
-
-.swatches--filters {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.swatches--frames {
-  grid-template-columns: repeat(3, 1fr);
+  width: max-content;
+  min-width: 100%;
+  padding: 0.2rem 0.2rem 0.65rem;
 }
 
 .swatch {
   display: flex;
+  flex: 0 0 clamp(4.7rem, 20vw, 5.6rem);
   flex-direction: column;
   align-items: center;
   gap: 0.3rem;
@@ -36,6 +107,7 @@
   border: 2px solid transparent;
   border-radius: var(--radius);
   background: transparent;
+  scroll-snap-align: start;
   transition: transform 0.08s ease;
 }
 
@@ -76,7 +148,7 @@
 
 /* Height-led so the tall strip proportion doesn't force a huge swatch. */
 .swatch__frame--strip {
-  aspect-ratio: 34 / 90;
+  aspect-ratio: 34 / 124;
   height: clamp(3.2rem, 15vw, 4.6rem);
   width: auto;
   max-width: 100%;
@@ -111,17 +183,78 @@
   font-size: 0.82rem;
   line-height: 1.1;
   text-align: center;
+  min-height: 0.9rem;
+}
+
+.settings__note--hidden {
+  visibility: hidden;
 }
 
 @media (min-width: 768px) {
-  .settings__body {
-    width: min(58rem, 100%);
-  }
-
-  .swatches--filters {
-    grid-template-columns: repeat(9, 1fr);
-  }
   .swatch__label {
     font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .scroll-rail {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+    align-items: center;
+    gap: 0.1rem;
+  }
+
+  .scroll-rail__viewport {
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0;
+  }
+
+  .scroll-rail__arrow {
+    position: static;
+    display: grid;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 2rem;
+    transform: none;
+  }
+
+  .scroll-rail__arrow--left {
+    justify-self: start;
+  }
+
+  .scroll-rail__arrow--right {
+    justify-self: end;
+  }
+
+  .scroll-rail__arrow:not(:disabled):active {
+    transform: scale(0.94);
+  }
+
+  .swatches {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 1rem) / 3);
+    width: 100%;
+    min-width: 100%;
+    padding: 0.2rem 0 0.65rem;
+  }
+
+  .swatch {
+    width: 100%;
+    min-width: 0;
+    scroll-snap-stop: always;
+  }
+}
+
+@media (max-width: 20rem) {
+  .swatches {
+    grid-auto-columns: calc((100% - 0.5rem) / 2);
+  }
+}
+
+@media (min-width: 30.01rem) and (max-width: 47.99rem) {
+  .swatches {
+    grid-auto-columns: calc((100% - 2rem) / 5);
   }
 }

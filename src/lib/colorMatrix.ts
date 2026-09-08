@@ -72,18 +72,16 @@ function contrast(k: number): Matrix {
  *
  * A list rather than one composed matrix, because CSS clamps to 8 bits after
  * *every* primitive. Folding them into a single matrix defers all clamping to
- * the end, which agreed closely for gentle filters but drifted up to 71/255 on
- * bronze, where saturate(3) drives values far out of range. Applying one pass
- * per primitive reproduces the browser's clamping exactly.
+ * the end, which can drift badly on strong, multi-stage filters. Applying one
+ * pass per primitive reproduces the browser's clamping exactly.
  */
 export const FILTER_STAGES: Record<string, Matrix[]> = {
   none: [],
-  disposable: [contrast(1.45), saturate(1.5), brightness(1.08), hueRotate(-6), sepia(0.12)],
   bw: [grayscale(1), contrast(1.3)],
   sepia: [sepia(1), brightness(0.66), saturate(1.6), hueRotate(-8), contrast(1.08)],
-  bronze: [sepia(1), brightness(0.88), hueRotate(-28), saturate(2), contrast(1.05)],
+  kodak: [brightness(0.98), contrast(0.76), saturate(0.64), sepia(0.22), hueRotate(-12)],
   vintage: [sepia(0.7), saturate(0.7), contrast(0.8), brightness(1.16), hueRotate(-10)],
-  y2k: [contrast(1.18), saturate(1.65), brightness(1.08), hueRotate(8)],
-  instagram2016: [sepia(0.18), saturate(1.28), contrast(1.08), brightness(1.06), hueRotate(-8)],
-  digicam: [contrast(1.3), saturate(1.12), brightness(1.12), hueRotate(-4)],
+  y2k: [brightness(1.16), contrast(0.9), saturate(0.88), sepia(0.16), hueRotate(34)],
+  instagram2016: [sepia(0.32), saturate(1.28), contrast(1.04), brightness(1.1), hueRotate(-14)],
+  digicam: [brightness(1.12), contrast(1.28), saturate(0.72), hueRotate(7)],
 };
