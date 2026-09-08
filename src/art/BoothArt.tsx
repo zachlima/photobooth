@@ -67,17 +67,11 @@ export function BoothArt({ variant }: { variant: 0 | 1 }) {
         </clipPath>
       </defs>
 
-      {/* ---- legs ------------------------------------------------------------- */}
-      <g filter={`url(#${id('paper')})`}>
-        <rect x={56 + w} y="344" width="32" height="40" rx="2" fill="var(--blue-deep)" />
-        <rect x={212 - w} y="344" width="32" height="40" rx="2" fill="var(--blue-deep)" />
-      </g>
-
       {/* ---- booth body --------------------------------------------------------
           An under-sheet peeking out, the way a layered paper collage does. */}
-      <rect x="33" y="85" width="236" height="264" rx="3" fill="var(--blue-deep)" opacity="0.55" />
+      <rect x="33" y="85" width="236" height="290" rx="3" fill="var(--blue-deep)" opacity="0.55" />
       <g filter={`url(#${id('paper')})`}>
-        <rect x="34" y="80" width="232" height="264" rx="3" fill={`url(#${id('stripes')})`} />
+        <rect x="34" y="80" width="232" height="290" rx="3" fill={`url(#${id('stripes')})`} />
       </g>
 
       {/* ---- awning ------------------------------------------------------------ */}
@@ -145,28 +139,12 @@ export function BoothArt({ variant }: { variant: 0 | 1 }) {
         <circle cx="164" cy="101" r="2.2" fill="var(--pink-deep)" />
       </g>
 
-      {/* ---- FREE sign ---------------------------------------------------------- */}
-      <g transform={`rotate(${w * 2} 62 200)`} filter={`url(#${id('paper')})`}>
-        <rect x="34" y="158" width="56" height="86" rx="2" fill="var(--pink-deep)" />
-        <rect x="34" y="154" width="56" height="86" rx="2" fill="var(--yellow)" />
-        <text x="62" y="186" textAnchor="middle" fontFamily={HAND} fontWeight="700" fontSize="26" fill={INK}>
-          FREE
-        </text>
-        <line x1="44" y1="194" x2="80" y2="194" stroke={INK} strokeWidth="1.4" opacity="0.5" />
-        <text x="62" y="212" textAnchor="middle" fontFamily={HAND} fontWeight="700" fontSize="13" fill={INK}>
-          no coins
-        </text>
-        <text x="62" y="228" textAnchor="middle" fontFamily={HAND} fontWeight="700" fontSize="13" fill={INK}>
-          needed
-        </text>
-      </g>
-
       {/* ---- tap-to-start label -------------------------------------------------
           With the Start button gone this is the only cue that the booth is the
-          thing to press, so it lives in the art rather than beside it. */}
-      <g transform={`rotate(${-w * 1.2} 150 372)`} filter={`url(#${id('paper')})`}>
-        <rect x="88" y="354" width="124" height="34" rx="17" fill="var(--yellow)" />
-        <text x="150" y="378" textAnchor="middle" fontFamily={HAND} fontWeight="700" fontSize="22" fill={INK}>
+          thing to press, so it lives on the booth itself. */}
+      <g transform={`rotate(${-w * 1.2} 150 352)`} filter={`url(#${id('paper')})`}>
+        <rect x="88" y="334" width="124" height="34" rx="17" fill="var(--yellow)" />
+        <text x="150" y="358" textAnchor="middle" fontFamily={HAND} fontWeight="700" fontSize="22" fill={INK}>
           tap to start!
         </text>
       </g>

@@ -29,9 +29,10 @@ export function CameraIcon() {
 export function StripIcon() {
   return (
     <svg viewBox="0 0 32 32" aria-hidden="true">
-      <rect x="10" y="3" width="12" height="21" {...S} fill="var(--yellow)" />
-      <line x1="10" y1="10" x2="22" y2="10" {...S} />
-      <line x1="10" y1="17" x2="22" y2="17" {...S} />
+      <rect x="10" y="2" width="12" height="22" {...S} fill="var(--yellow)" />
+      <line x1="10" y1="7.5" x2="22" y2="7.5" {...S} />
+      <line x1="10" y1="13" x2="22" y2="13" {...S} />
+      <line x1="10" y1="18.5" x2="22" y2="18.5" {...S} />
       <path d="M16 24v5m0 0-3-3m3 3 3-3" {...S} />
     </svg>
   );
