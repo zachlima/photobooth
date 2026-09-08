@@ -139,23 +139,29 @@ button {
 .header__steps {
   grid-column: 3;
   display: flex;
-  gap: 0.18rem;
+  gap: 0.25rem;
   align-items: center;
   justify-self: end;
 }
 
-.header__star {
-  display: inline-block;
-  width: 1rem;
+.header__step {
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: transparent;
   color: var(--ink);
-  font-family: var(--body);
-  font-size: 1.25rem;
+  font-family: var(--display);
+  font-size: 0.85rem;
+  font-weight: 700;
   line-height: 1;
-  text-align: center;
 }
 
-.header__star--on {
-  color: var(--ink);
+.header__step--on {
+  background: var(--ink);
+  color: var(--paper);
 }
 
 /* Every screen is header + flexible body + fixed control row. */

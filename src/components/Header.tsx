@@ -39,10 +39,10 @@ export function Header({ route }: { route: Route }) {
         {[1, 2, 3].map((n) => (
           <span
             key={n}
-            className={`header__star${step >= n ? ' header__star--on' : ''}`}
+            className={`header__step${step >= n ? ' header__step--on' : ''}`}
             aria-hidden="true"
           >
-            {step >= n ? '★' : '☆'}
+            {n}
           </span>
         ))}
       </div>
