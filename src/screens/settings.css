@@ -91,6 +91,7 @@
 .swatches {
   display: flex;
   flex-wrap: nowrap;
+  justify-content: center;
   gap: 0.5rem;
   width: max-content;
   min-width: 100%;
@@ -233,6 +234,7 @@
 
   .swatches {
     display: grid;
+    justify-content: initial;
     grid-auto-flow: column;
     grid-auto-columns: calc((100% - 1rem) / 3);
     width: 100%;
