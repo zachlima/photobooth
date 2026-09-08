@@ -5,22 +5,35 @@ import { canShareStrip, downloadStrip, shareStrip } from '../lib/save';
 import { useBooth } from '../state/BoothContext';
 import './result.css';
 
+const DEVELOPING_MS = 6000;
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export function Result() {
   const { photos, frame, stripDataUrl, setStripDataUrl, resetSession } = useBooth();
   const [toast, setToast] = useState<string | null>(null);
+  const [developingDots, setDevelopingDots] = useState(1);
 
   const aspect = stripAspect(frame, photos.length);
   const touchFirst = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
   useEffect(() => {
     let cancelled = false;
-    renderStrip(photos, frame).then((url) => {
+    Promise.all([renderStrip(photos, frame), sleep(DEVELOPING_MS)]).then(([url]) => {
       if (!cancelled) setStripDataUrl(url);
     });
     return () => {
       cancelled = true;
     };
   }, [photos, frame, setStripDataUrl]);
+
+  useEffect(() => {
+    if (stripDataUrl) return;
+    const timer = window.setInterval(() => {
+      setDevelopingDots((dots) => (dots % 3) + 1);
+    }, 600);
+    return () => window.clearInterval(timer);
+  }, [stripDataUrl]);
 
   const save = async () => {
     if (!stripDataUrl) return;
@@ -57,7 +70,9 @@ export function Result() {
                   alt="Your finished photo print. Press and hold to save it."
                 />
               ) : (
-                <p className="note dispenser__waiting">Developing…</p>
+                <p className="note dispenser__waiting" aria-live="polite">
+                  developing{' .'.repeat(developingDots)}
+                </p>
               )}
             </div>
           </div>

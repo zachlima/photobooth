@@ -25,7 +25,7 @@
   align-items: center;
 }
 
-/* Something has to happen during the three-second wait, or the screen reads
+/* Something has to happen during the six-second wait, or the screen reads
    as broken rather than as a booth printing. */
 @keyframes slot-working {
   0%, 100% { transform: scaleX(1); }
@@ -34,7 +34,7 @@
 
 .dispenser__slot {
   flex: 0 0 auto;
-  animation: slot-working 0.9s ease-in-out 3 both;
+  animation: slot-working 0.9s ease-in-out 6 both;
   /* Wider than the strip it dispenses, or it reads as a bar behind the paper
      rather than the mouth of a slot. */
   width: calc(100% + 1.5rem);
@@ -73,12 +73,11 @@
   -webkit-user-select: auto;
   user-select: auto;
 
-  /* Three seconds of "printing" before anything appears, then three seconds
-     to feed out. Both use fill-mode `both`, so the finished state persists on
-     its own — swapping the animation list afterwards would restart the slide. */
+  /* The six-second developing wait happens before the image is mounted. It
+     then takes three seconds to feed out while its contrast settles. */
   animation:
-    dispense 3s cubic-bezier(0.25, 0.6, 0.3, 1) 3s both,
-    develop 3s ease-out 3.5s both;
+    dispense 3s cubic-bezier(0.25, 0.6, 0.3, 1) both,
+    develop 3s ease-out 0.5s both;
 }
 
 @keyframes dispense {
