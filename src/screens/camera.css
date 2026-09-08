@@ -1,0 +1,266 @@
+.camera__stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Landscape preview leaves slack below it; centre rather than top-align. */
+  justify-content: center;
+  gap: var(--gutter);
+
+  /* Space the preview cannot use: header, slot row, button, gutters.
+     Measured against the real layout and rounded up. --app-h is the
+     JS-published viewport height; dvh is the pre-hydration fallback. */
+  --stage-h: calc(var(--app-h, 100dvh) - 12.5rem);
+}
+
+/* --- live preview --------------------------------------------------------- */
+.preview {
+  position: relative;
+  flex: 0 0 auto;
+  min-height: 0;
+
+  /* aspect-ratio alone loses to flex stretching, which silently made the
+     preview a different shape from the capture crop. Sizing the width against
+     both the available width and height keeps the ratio exact in either
+     orientation. --cell-aspect is set inline from CELL_ASPECT. */
+  width: min(100%, calc(var(--stage-h) * var(--cell-aspect)));
+  aspect-ratio: var(--cell-aspect);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #2b2119;
+  box-shadow: var(--lift);
+}
+
+.preview__video,
+.preview__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mirrored so framing behaves like a mirror; the capture is mirrored to match.
+   The blur canvas is mirrored during drawing instead, so it isn't flipped here. */
+.preview__video {
+  transform: scaleX(-1);
+}
+
+.preview__video--hidden {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.preview__msg,
+.preview__hint,
+.preview__month {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(253, 252, 247, 0.92);
+  border: 2px solid var(--ink);
+  font-size: 1rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.preview__msg {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.preview__hint {
+  bottom: 0.75rem;
+}
+
+.preview__month {
+  top: 0.75rem;
+  color: #9d2440;
+  background: rgba(255, 252, 247, 0.95);
+}
+
+/* --- countdown ------------------------------------------------------------ */
+.countdown {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.countdown__num {
+  font-family: var(--display);
+  font-size: clamp(4rem, 22vmin, 9rem);
+  line-height: 1;
+  color: var(--paper);
+  -webkit-text-stroke: 3px var(--ink);
+  paint-order: stroke fill;
+  animation: countdown-pop 1s ease-out;
+}
+
+@keyframes countdown-pop {
+  0% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  18% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.94);
+    opacity: 0.85;
+  }
+}
+
+/* --- flash ---------------------------------------------------------------- */
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 90ms ease-out;
+}
+
+.flash--on {
+  opacity: 1;
+}
+
+/* A full-screen white blast is exactly what reduced-motion users opt out of;
+   give them a border pulse instead. */
+@media (prefers-reduced-motion: reduce) {
+  .flash--on {
+    opacity: 0;
+    box-shadow: inset 0 0 0 8px var(--yellow);
+  }
+}
+
+/* --- photo slots ---------------------------------------------------------- */
+.slots {
+  flex: 0 0 auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.slot {
+  position: relative;
+  width: 3rem;
+  border: 2px dashed var(--ink-soft);
+  border-radius: 0.35rem;
+  display: grid;
+  place-items: center;
+  background: var(--paper-shade);
+  overflow: hidden;
+}
+
+.slot--filled {
+  border-style: solid;
+  border-color: var(--ink);
+  background: none;
+  animation: slot-land 0.3s ease-out;
+}
+
+@keyframes slot-land {
+  from {
+    transform: scale(0.8) rotate(-4deg);
+  }
+  to {
+    transform: scale(1) rotate(0);
+  }
+}
+
+.slot__num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+}
+
+.slot__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.slots--many {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.25rem;
+  width: min(100%, 20rem);
+}
+
+.slots--many .slot {
+  width: 100%;
+}
+
+.slots--many .slot__num {
+  font-size: 0.78rem;
+}
+
+/* Desktop: the strip stands upright beside the preview, the way it will print. */
+@media (min-width: 768px) {
+  .camera__stage {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .camera__stage {
+    /* Slots sit beside the preview here, so no slot row to subtract. */
+    --stage-h: calc(var(--app-h, 100dvh) - 10.25rem);
+  }
+
+  .preview {
+    width: min(calc(100% - 6rem), calc(var(--stage-h) * var(--cell-aspect)));
+  }
+
+  .slots {
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .slots--many {
+    display: grid;
+    grid-template-columns: repeat(2, 2.75rem);
+    grid-template-rows: repeat(6, auto);
+    height: auto;
+    width: auto;
+  }
+
+  .slots--many .slot {
+    width: 2.75rem;
+  }
+
+  .slot {
+    width: 4rem;
+  }
+}
+
+/* --- permission / hardware problems --------------------------------------- */
+.problem {
+  max-width: 22rem;
+  text-align: center;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: var(--lift);
+  padding: 1.25rem 1.1rem;
+}
+
+.problem__title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin: 0 0 0.5rem;
+}

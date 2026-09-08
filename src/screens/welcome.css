@@ -1,0 +1,142 @@
+.welcome__body {
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* --- two-frame flipbook --------------------------------------------------- */
+.booth-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.booth-flip {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+/* Both frames absolutely positioned: each gets a definite box from the stage,
+   so neither depends on a height inherited through the button. */
+.booth-flip__frame {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+.booth-flip__frame--b {
+  animation: booth-flip 0.9s steps(1, end) infinite;
+}
+
+/* Hard cut between the two drawings — no cross-fade, or it reads as a blur
+   rather than as movement. */
+@keyframes booth-flip {
+  0%,
+  49.9% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Fill the frame and let the viewBox letterbox via the default
+   preserveAspectRatio. Sizing an SVG with width:auto off its intrinsic ratio
+   is exactly the fragile path that broke on iOS. */
+.booth-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.booth-flip:active .booth-art {
+  transform: scale(0.985);
+}
+
+/* --- 1 · 2 · 3 ------------------------------------------------------------ */
+.steps {
+  flex: 0 0 auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  width: min(30rem, 100%);
+}
+
+/* Deliberately flat: no border, fill or shadow. These are a caption explaining
+   the flow, not controls — anything button-shaped invites a tap that does
+   nothing. The only affordances on this screen are the booth and Start. */
+.steps__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.25rem 0.25rem 0;
+  background: none;
+  border: none;
+}
+
+/* Arrows between the steps, so the order is unmistakable. */
+.steps__item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: -0.2rem;
+  top: 45%;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-top: 2px solid var(--ink-soft);
+  border-right: 2px solid var(--ink-soft);
+  transform: translateY(-50%) rotate(45deg);
+  opacity: 0.7;
+}
+
+.steps__num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+.steps__icon svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: block;
+}
+
+.steps__label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-soft);
+  text-align: center;
+  line-height: 1.15;
+}
+
+@media (min-width: 768px) {
+  .steps__label {
+    font-size: 1.1rem;
+  }
+  .steps__icon svg {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+}
+
+/* Very short viewports (landscape phones): the art yields, the controls stay. */
+@media (max-height: 520px) {
+  .steps__label {
+    display: none;
+  }
+}

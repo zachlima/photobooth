@@ -1,0 +1,298 @@
+:root {
+  --paper: #fffcf5;
+  --paper-shade: #f5efe1;
+  /* Soft dark brown rather than black — ink on paper, not print. */
+  --ink: #423a32;
+  --ink-soft: #857a6d;
+
+  /* Construction paper: light blue, green, yellow, pink. Each has a deeper
+     tint used for the layer sitting underneath a cut shape. */
+  --blue: #bfddf2;
+  --blue-deep: #98c5e6;
+  --green: #c6e9d0;
+  --green-deep: #9bd5ae;
+  --yellow: #fbeeb0;
+  --yellow-deep: #f4de84;
+  --pink: #fbd0df;
+  --pink-deep: #f3aac5;
+
+  --display: 'Gaegu', 'Short Stack', 'Comic Sans MS', cursive;
+  --script: 'Gaegu', 'Short Stack', cursive;
+  --body: 'Gaegu', 'Short Stack', system-ui, sans-serif;
+
+  --header-h: 3.5rem;
+  --gutter: clamp(0.75rem, 3vw, 1.25rem);
+  --radius: 0.75rem;
+
+  /* A hard offset shadow reads as cut paper laid on a page. */
+  --lift: 3px 3px 0 var(--ink);
+  --lift-sm: 2px 2px 0 var(--ink);
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  /* Long-press should offer "Save Image" on the strip, not a text selection. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* ===========================================================================
+   App shell — nothing on any screen scrolls.
+   =========================================================================== */
+/* --app-h is written from JS on every resize/restore (see useViewportHeight).
+   `dvh` alone is not enough: when Chrome on iOS restores a backgrounded tab it
+   can lay out against a stale viewport, which blew the whole page up until
+   something forced a resize. The dvh value stays as the pre-hydration
+   fallback. */
+#root {
+  height: 100vh;
+  height: 100dvh;
+  height: var(--app-h, 100dvh);
+  overflow: hidden;
+}
+
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Faint speckle, like flecked craft paper. */
+  background-color: var(--paper);
+  background-image: radial-gradient(rgba(90, 70, 50, 0.06) 0.5px, transparent 0.5px);
+  background-size: 7px 7px;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.header {
+  flex: 0 0 auto;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 var(--gutter);
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.header__home {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  border: 2px solid var(--ink);
+  background: var(--pink);
+  border-radius: 999px;
+  padding: 0.3rem 0.8rem 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  box-shadow: var(--lift-sm);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.header__home:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+/* Header title doubles as the step indicator, so the user always knows
+   where they are without a separate progress bar. */
+.header__title {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.header__steps {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.header__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: transparent;
+}
+
+.header__dot--on {
+  background: var(--ink);
+}
+
+/* Every screen is header + flexible body + fixed control row. */
+.screen {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--gutter);
+  gap: var(--gutter);
+}
+
+.screen__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gutter);
+}
+
+.screen__controls {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===========================================================================
+   Buttons
+   =========================================================================== */
+.btn {
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.55rem 1.6rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: var(--yellow);
+  box-shadow: var(--lift);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+.btn--primary {
+  background: var(--green);
+}
+
+.btn--ghost {
+  background: var(--paper);
+}
+
+.btn--wide {
+  width: min(22rem, 100%);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  transform: translate(3px, 3px);
+  cursor: default;
+}
+
+/* ===========================================================================
+   Shared text bits
+   =========================================================================== */
+.script {
+  font-family: var(--script);
+  font-size: 1.35rem;
+  line-height: 1.1;
+}
+
+.section-label {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 0.5rem;
+}
+
+.note {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===========================================================================
+   Filter overlays — must mirror drawVignette() and addGrain() in
+   src/lib/filters.ts, which use the same strengths on the saved photo.
+   =========================================================================== */
+.vignette,
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vignette {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(30, 20, 10, 0) 30%,
+    rgba(30, 20, 10, calc(0.62 * var(--vignette, 0))) 100%
+  );
+}
+
+/* Static noise tile. The capture generates real random grain, so these are not
+   pixel-identical — only the amount and coarseness need to agree. */
+.grain {
+  opacity: calc(0.55 * var(--grain, 0));
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23n)'/></svg>");
+  background-size: 120px 120px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
