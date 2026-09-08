@@ -49,6 +49,7 @@
 
 /* Clips the strip so it appears to emerge from the slot rather than fade in. */
 .dispenser__window {
+  position: relative;
   width: 100%;
   aspect-ratio: var(--strip-aspect);
   overflow: hidden;
@@ -56,8 +57,11 @@
 }
 
 .dispenser__waiting {
-  align-self: center;
-  padding: 2rem 0;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
 }
 
 .strip {
