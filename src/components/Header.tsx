@@ -20,20 +20,30 @@ export function Header({ route }: { route: Route }) {
 
   return (
     <header className="header">
-      {route === 'welcome' ? (
-        <span className="header__title">{TITLE_OF[route]}</span>
-      ) : (
-        <button className="header__home" onClick={() => navigate('welcome')}>
-          <HomeIcon />
-          Start over
-        </button>
-      )}
+      <div className="header__start">
+        {route !== 'welcome' && (
+          <button
+            className="header__home"
+            onClick={() => navigate('welcome')}
+            aria-label="Start over"
+            title="Start over"
+          >
+            <HomeIcon />
+          </button>
+        )}
+      </div>
 
-      {route !== 'welcome' && <span className="header__title">{TITLE_OF[route]}</span>}
+      {route !== 'welcome' && <h1 className="header__title">{TITLE_OF[route]}</h1>}
 
       <div className="header__steps" aria-label={`Step ${step} of 3`}>
         {[1, 2, 3].map((n) => (
-          <span key={n} className={`header__dot${step >= n ? ' header__dot--on' : ''}`} />
+          <span
+            key={n}
+            className={`header__star${step >= n ? ' header__star--on' : ''}`}
+            aria-hidden="true"
+          >
+            {step >= n ? '★' : '☆'}
+          </span>
         ))}
       </div>
     </header>
@@ -42,7 +52,7 @@ export function Header({ route }: { route: Route }) {
 
 function HomeIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true">
       <path
         d="M2 7.2 8 2l6 5.2V14H10v-4H6v4H2z"
         fill="none"

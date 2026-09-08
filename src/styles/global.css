@@ -91,27 +91,29 @@ button {
 .header {
   flex: 0 0 auto;
   height: var(--header-h);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 0.5rem;
   padding: 0 var(--gutter);
   border-bottom: 2px solid var(--ink);
   background: var(--paper);
 }
 
+.header__start {
+  justify-self: start;
+}
+
 .header__home {
-  display: inline-flex;
+  display: grid;
+  place-items: center;
   align-items: center;
-  gap: 0.4rem;
-  font-family: var(--display);
-  font-size: 1.05rem;
   border: 2px solid var(--ink);
   background: var(--pink);
-  border-radius: 999px;
-  padding: 0.3rem 0.8rem 0.3rem 0.6rem;
-  font-size: 0.8rem;
-  font-weight: 700;
+  border-radius: 50%;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
   box-shadow: var(--lift-sm);
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
@@ -124,29 +126,36 @@ button {
 /* Header title doubles as the step indicator, so the user always knows
    where they are without a separate progress bar. */
 .header__title {
+  grid-column: 2;
   font-family: var(--display);
   font-weight: 700;
   font-size: 1.25rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  text-align: center;
+  margin: 0;
 }
 
 .header__steps {
+  grid-column: 3;
   display: flex;
-  gap: 0.3rem;
+  gap: 0.18rem;
   align-items: center;
+  justify-self: end;
 }
 
-.header__dot {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 50%;
-  border: 2px solid var(--ink);
-  background: transparent;
+.header__star {
+  display: inline-block;
+  width: 1rem;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.25rem;
+  line-height: 1;
+  text-align: center;
 }
 
-.header__dot--on {
-  background: var(--ink);
+.header__star--on {
+  color: var(--ink);
 }
 
 /* Every screen is header + flexible body + fixed control row. */
