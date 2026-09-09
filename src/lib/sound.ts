@@ -1,4 +1,5 @@
 const SOUND_KEY = 'photobooth-sound';
+const OUTPUT_GAIN = 1.7;
 
 let audioContext: AudioContext | null = null;
 
@@ -45,7 +46,7 @@ function playTone(
   oscillator.type = type;
   oscillator.frequency.setValueAtTime(frequency, start);
   gain.gain.setValueAtTime(0.0001, start);
-  gain.gain.exponentialRampToValueAtTime(volume, start + 0.008);
+  gain.gain.exponentialRampToValueAtTime(volume * OUTPUT_GAIN, start + 0.008);
   gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
   oscillator.connect(gain).connect(context.destination);
   oscillator.start(start);
@@ -79,7 +80,7 @@ function playNoiseBurst(
   filter.type = 'bandpass';
   filter.frequency.value = frequency;
   filter.Q.value = 0.75;
-  gain.gain.value = volume;
+  gain.gain.value = volume * OUTPUT_GAIN;
   source.connect(filter).connect(gain).connect(context.destination);
   source.start(start);
 }
