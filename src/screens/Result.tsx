@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { navigate } from '../hooks/useHashRoute';
 import { renderStrip, stripAspect } from '../lib/strip';
 import { canShareStrip, downloadStrip, shareStrip } from '../lib/save';
+import { playCompletionChime } from '../lib/sound';
 import { useBooth } from '../state/BoothContext';
 import './result.css';
 
 const DEVELOPING_MS = 6000;
+const DISPENSE_MS = 3000;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -33,6 +35,14 @@ export function Result() {
       setDevelopingDots((dots) => (dots % 3) + 1);
     }, 600);
     return () => window.clearInterval(timer);
+  }, [stripDataUrl]);
+
+  useEffect(() => {
+    if (!stripDataUrl) return;
+    const timer = window.setTimeout(() => {
+      playCompletionChime();
+    }, DISPENSE_MS);
+    return () => window.clearTimeout(timer);
   }, [stripDataUrl]);
 
   const save = async () => {

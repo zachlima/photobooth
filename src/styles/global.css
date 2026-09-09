@@ -101,15 +101,17 @@ button {
 }
 
 .header__start {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   justify-self: start;
 }
 
-.header__home {
+.header__home,
+.header__sound {
   display: grid;
   place-items: center;
-  align-items: center;
   border: 2px solid var(--ink);
-  background: var(--pink);
   border-radius: 50%;
   width: 2.1rem;
   height: 2.1rem;
@@ -118,7 +120,16 @@ button {
   transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 
-.header__home:active {
+.header__home {
+  background: var(--pink);
+}
+
+.header__sound {
+  background: var(--blue);
+}
+
+.header__home:active,
+.header__sound:active {
   transform: translate(2px, 2px);
   box-shadow: none;
 }

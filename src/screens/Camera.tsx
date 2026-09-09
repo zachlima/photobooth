@@ -3,6 +3,7 @@ import { FilterOverlays } from '../components/FilterOverlays';
 import { useCamera } from '../hooks/useCamera';
 import { navigate } from '../hooks/useHashRoute';
 import { capturePhoto } from '../lib/capture';
+import { playCountdownTick, playShutter } from '../lib/sound';
 import { useBooth } from '../state/BoothContext';
 import { CELL_ASPECT, filterCssForPreview, frameById } from '../types';
 import './camera.css';
@@ -49,11 +50,13 @@ export function Camera() {
       for (let c = COUNTDOWN_FROM; c > 0; c--) {
         if (abort.current) return;
         setCount(c);
+        playCountdownTick(c);
         await sleep(1000);
       }
       if (abort.current) return;
 
       setCount(0);
+      playShutter();
       setFlash(true);
       await sleep(FLASH_MS);
 
