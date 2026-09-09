@@ -19,6 +19,7 @@
 /* Width is definite (viewport-derived), so aspect-ratio can give the window a
    definite height without depending on the image inside it. */
 .dispenser__inner {
+  position: relative;
   width: min(100%, calc(var(--strip-h) * var(--strip-aspect)));
   display: flex;
   flex-direction: column;
@@ -56,12 +57,17 @@
   margin-top: -2px;
 }
 
-.dispenser__waiting {
+.note.dispenser__waiting {
   position: absolute;
-  inset: 0;
+  top: 0.85rem;
+  bottom: 0;
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
   display: grid;
   place-items: center;
   font-size: 1.2rem;
+  white-space: nowrap;
 }
 
 .strip {

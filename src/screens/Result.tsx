@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { navigate } from '../hooks/useHashRoute';
 import { renderStrip, stripAspect } from '../lib/strip';
 import { canShareStrip, downloadStrip, shareStrip } from '../lib/save';
 import { playCompletionChime } from '../lib/sound';
@@ -12,7 +11,7 @@ const DISPENSE_MS = 3000;
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function Result() {
-  const { photos, frame, stripDataUrl, setStripDataUrl, resetSession } = useBooth();
+  const { photos, frame, stripDataUrl, setStripDataUrl } = useBooth();
   const [toast, setToast] = useState<string | null>(null);
   const [developingDots, setDevelopingDots] = useState(1);
 
@@ -54,11 +53,6 @@ export function Result() {
     setTimeout(() => setToast(null), 2600);
   };
 
-  const again = () => {
-    resetSession();
-    navigate('camera');
-  };
-
   return (
     <main className="screen result">
       <div className="screen__body result__body">
@@ -73,18 +67,19 @@ export function Result() {
           >
             <div className="dispenser__slot" aria-hidden="true" />
             <div className="dispenser__window">
-              {stripDataUrl ? (
+              {stripDataUrl && (
                 <img
                   className="strip"
                   src={stripDataUrl}
                   alt="Your finished photo print. Press and hold to save it."
                 />
-              ) : (
-                <p className="note dispenser__waiting" aria-live="polite">
-                  developing{' .'.repeat(developingDots)}
-                </p>
               )}
             </div>
+            {!stripDataUrl && (
+              <p className="note dispenser__waiting" aria-live="polite">
+                developing{' .'.repeat(developingDots)}
+              </p>
+            )}
           </div>
         </div>
 
@@ -95,11 +90,8 @@ export function Result() {
       </div>
 
       <div className="screen__controls">
-        <button className="btn btn--primary" onClick={save} disabled={!stripDataUrl}>
+        <button className="btn btn--primary btn--wide" onClick={save} disabled={!stripDataUrl}>
           {canShareStrip() ? 'Save' : 'Download'}
-        </button>
-        <button className="btn btn--ghost" onClick={again}>
-          Again
         </button>
       </div>
 
