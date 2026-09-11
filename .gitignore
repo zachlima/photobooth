@@ -5,3 +5,4 @@ dist
 .netlify
 tsconfig.tsbuildinfo
 .idea/
+ROADMAP.md
